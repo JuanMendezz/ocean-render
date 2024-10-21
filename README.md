@@ -1,12 +1,12 @@
-# ocean-render
+# Three.js-Ocean-Scene
 
 This project is an example of lightweight procedural skybox and ocean shaders for browsers using the [Three.js](https://threejs.org/) library. It is mainly designed for mobile, so don't expect too much in terms of graphics, but expect performance (I get a constant 120 FPS on a 2021 mid-range mobile at full resolution).
 
-| ![day](https://github.com/JuanMendezz/ocean-render/assets/78450254/757c8c97-d336-4e9e-8039-13453c2a43f7) | ![sunset](https://github.com/JuanMendezz/ocean-render/assets/78450254/b476220f-293c-461a-8f4c-377c6e889d67) | ![moon_rising](https://github.com/JuanMendezz/ocean-render/assets/78450254/c327680c-264f-478c-a8bb-cd951a3a4c75) |
-| :------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------: |
-|                                                _Daytime_                                                 |                                                  _Sunset_                                                   |                                                  _Moon rising_                                                   |
+| ![day](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/757c8c97-d336-4e9e-8039-13453c2a43f7) | ![sunset](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/b476220f-293c-461a-8f4c-377c6e889d67) | ![moon_rising](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/c327680c-264f-478c-a8bb-cd951a3a4c75) |
+| :--------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------: |
+|                                                    _Daytime_                                                     |                                                      _Sunset_                                                       |                                                      _Moon rising_                                                       |
 
-I made a [little demo](https://JuanMendezz.github.io/ocean-render/) so you can check how it runs and looks. It supports touch input too. Or you can watch [the video](https://youtu.be/xt4Nvrw1EMw).
+I made a [little demo](https://JuanMendezz.github.io/Three.js-Ocean-Scene/) so you can check how it runs and looks. It supports touch input too. Or you can watch [the video](https://youtu.be/xt4Nvrw1EMw).
 
 ## How it works
 
@@ -18,25 +18,25 @@ The skybox is basically a cube around the player generated with 3 gradients:
 - **Luminosity gradient**, which is used to estimate how much light reaches a given fragment
 - **Twilight gradient**, which is used to roughly simulate Rayleigh scattering by multiplying the density and luminosity gradients, offering beautiful dawns and dusks
 
-| ![density](https://github.com/JuanMendezz/ocean-render/assets/78450254/2a5b8df5-7a25-41a0-86a7-39b4efb769b9) | ![density_luminosity](https://github.com/JuanMendezz/ocean-render/assets/78450254/8129b891-367b-4045-8afb-2eef0ef034db) | ![luminosity](https://github.com/JuanMendezz/ocean-render/assets/78450254/97f0b07c-32c4-4127-ade0-8f22c8727b87) |
-| :----------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------: |
-|                                              _Density gradient_                                              |                                                   _Twilight gradient_                                                   |                                              _Luminosity gradient_                                              |
+| ![density](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/2a5b8df5-7a25-41a0-86a7-39b4efb769b9) | ![density_luminosity](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/8129b891-367b-4045-8afb-2eef0ef034db) | ![luminosity](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/97f0b07c-32c4-4127-ade0-8f22c8727b87) |
+| :------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------: |
+|                                                  _Density gradient_                                                  |                                                       _Twilight gradient_                                                       |                                                  _Luminosity gradient_                                                  |
 
-| ![color](https://github.com/JuanMendezz/ocean-render/assets/78450254/64f1a220-39c0-431b-aef1-ca07cd5256ad) |
-| :--------------------------------------------------------------------------------------------------------: |
-|                                       _Twilight gradient with color_                                       |
+| ![color](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/64f1a220-39c0-431b-aef1-ca07cd5256ad) |
+| :----------------------------------------------------------------------------------------------------------------: |
+|                                           _Twilight gradient with color_                                           |
 
 The sun is drawn by raising the luminosity gradient to some power and multiplying the result so that we get a glow around the sun. The moon is essentially the same thing, but with the inversed luminosity gradient, a higher power and higher multiplier so that the glow is more subtle.
 
-| ![sun](https://github.com/JuanMendezz/ocean-render/assets/78450254/71f5eb89-12f5-4714-9032-aa8697fdec1d) | ![moon](https://github.com/JuanMendezz/ocean-render/assets/78450254/c569a507-1c55-474a-a535-99769cf6f38e) |
-| :------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: |
-|                                                _The sun_                                                 |                                                _The moon_                                                 |
+| ![sun](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/71f5eb89-12f5-4714-9032-aa8697fdec1d) | ![moon](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/c569a507-1c55-474a-a535-99769cf6f38e) |
+| :--------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------: |
+|                                                    _The sun_                                                     |                                                    _The moon_                                                     |
 
 The stars are generated by picking random 3d unit vectors mapped to a cube grid alongside with a random offset, size, and color. These vales are packed inside a texture and sent to the gpu. On the gpu, we map the corresponding cube grid values and compute the stars in a similar way to how the sun and moon were calculated. The moon and the stars are only drawn if the sky luminosity is low enough.
 
-| ![stars](https://github.com/JuanMendezz/ocean-render/assets/78450254/4d036c3c-12a2-48d9-8a7f-1be45d8a8522) | ![stars_unclamped](https://github.com/JuanMendezz/ocean-render/assets/78450254/cc778ff6-4fcd-489a-97f0-ecf7e18a9b90) |
-| :--------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------: |
-|                                                  _Stars_                                                   |                                           _Stars with unclamped distance_                                            |
+| ![stars](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/4d036c3c-12a2-48d9-8a7f-1be45d8a8522) | ![stars_unclamped](https://github.com/JuanMendezz/Three.js-Ocean-Scene/assets/78450254/cc778ff6-4fcd-489a-97f0-ecf7e18a9b90) |
+| :----------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------: |
+|                                                      _Stars_                                                       |                                               _Stars with unclamped distance_                                                |
 
 ### Water
 
